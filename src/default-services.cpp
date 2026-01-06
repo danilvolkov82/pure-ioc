@@ -5,7 +5,7 @@
 
 #include "default-services.h"
 
-using namespace ReactiveUI;
+using namespace PureIOC;
 
 /**
  * @brief Gets the service.

@@ -10,7 +10,7 @@
 
 #include "services-interface.h"
 
-namespace ReactiveUI {
+namespace PureIOC {
     /**
      * @brief Registers a service container.
      * @param services A shared pointer to the service container.

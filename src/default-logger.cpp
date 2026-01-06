@@ -6,7 +6,7 @@
 
 #include "default-logger.h"
 
-using namespace ReactiveUI;
+using namespace PureIOC;
 void
 DefaultLogger::log(const char *level, const std::string &message, std::ostream &os) {
     os << "[" << level << "] " << message << '\n';

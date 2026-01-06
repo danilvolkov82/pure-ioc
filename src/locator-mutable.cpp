@@ -6,7 +6,7 @@
 #include "locator-mutable.h"
 #include "container-manager.h"
 
-namespace ReactiveUI {
+namespace PureIOC {
 /**
  * @brief Registers a service with the locator.
  * @param type The type of the service.

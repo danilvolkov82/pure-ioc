@@ -12,7 +12,7 @@
 #include <string>
 #include <optional>
 
-namespace ReactiveUI {
+namespace PureIOC {
 /**
  * @brief Gets a service from the locator.
  * @param type The type of the service.

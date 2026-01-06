@@ -18,7 +18,7 @@
 #include <locator.h>
 #include <logger-interface.h>
 
-namespace ReactiveUI {
+namespace PureIOC {
 
 /**
  * @struct PairHash
@@ -189,7 +189,7 @@ private:
             return true;
         }
 
-        auto logger = ReactiveUI::getService<ILogger>();
+        auto logger = PureIOC::getService<ILogger>();
         if (logger) {
             logger->warn("Service is already registered with contract");
         }

@@ -6,7 +6,7 @@
 #include "locator.h"
 #include "container-manager.h"
 
-namespace ReactiveUI {
+namespace PureIOC {
 std::optional<std::any> getService(std::type_index type) {
     return getContainer()->getService(type);
 }

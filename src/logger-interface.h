@@ -2,7 +2,7 @@
 #define LOGGER_INTERFACE_H
 #include <string>
 
-namespace ReactiveUI {
+namespace PureIOC {
 /**
  * @brief An interface for logging.
  */

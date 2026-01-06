@@ -11,7 +11,7 @@
 
 #include "logger-interface.h"
 
-namespace ReactiveUI {
+namespace PureIOC {
 /**
  * @brief A default logger implementation that writes to standard output and standard error.
  * @internal

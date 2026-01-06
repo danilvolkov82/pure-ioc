@@ -7,7 +7,7 @@
 #include <any>
 #include <optional>
 
-namespace ReactiveUI {
+namespace PureIOC {
 /**
  * @brief An interface for a service locator.
  */

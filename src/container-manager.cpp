@@ -8,7 +8,7 @@
 #include "container-manager.h"
 #include "default-services.h"
 
-namespace ReactiveUI {
+namespace PureIOC {
 namespace {
     std::mutex g_mutex; ///< Mutex to protect the global container.
     std::shared_ptr<IServices> g_container; ///< The global service container.

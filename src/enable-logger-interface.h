@@ -9,7 +9,7 @@
 
 #include "logger-interface.h"
 
-namespace ReactiveUI {
+namespace PureIOC {
 /**
  * @brief An interface for classes that can provide a logger.
  */

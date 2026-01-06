@@ -8,7 +8,7 @@
 #include "locator-mutable.h"
 #include "default-logger.h"
 
-using namespace ReactiveUI;
+using namespace PureIOC;
 
 std::shared_ptr<ILogger>
 IEnableLogger::logger() {
