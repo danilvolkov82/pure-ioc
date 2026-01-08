@@ -60,3 +60,11 @@ install(TARGETS pure-ioc pure-ioc-shared
 )
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/ DESTINATION include FILES_MATCHING PATTERN "*.h")
 install(CODE "file(MAKE_DIRECTORY \"\${CMAKE_INSTALL_PREFIX}/include\")\nfile(WRITE \"\${CMAKE_INSTALL_PREFIX}/include/pure-ioc.h\" \"${SINGLE_HEADER_CONTENT_ESCAPED}\")")
+
+option(BUILD_TESTS "Build tests" OFF)
+
+if(BUILD_TESTS)
+    enable_testing()
+    include(cmake/GTest.cmake)
+    add_subdirectory(tests)
+endif()
