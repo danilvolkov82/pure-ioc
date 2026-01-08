@@ -25,7 +25,7 @@ namespace PureIOC {
  * @param factory The factory function that creates the service.
  * @return True if the service was registered, false otherwise.
  */
-bool registerService(std::type_index type, std::function<std::any()> factory);
+bool registerService(const std::type_index &type, std::function<std::any()> factory);
 /**
  * @brief Registers a service with the locator with a contract.
  * @param type The type of the service.
@@ -33,14 +33,14 @@ bool registerService(std::type_index type, std::function<std::any()> factory);
  * @param factory The factory function that creates the service.
  * @return True if the service was registered, false otherwise.
  */
-bool registerService(std::type_index type, const std::string &contract, std::function<std::any()> factory);
+bool registerService(const std::type_index &type, const std::string &contract, std::function<std::any()> factory);
 /**
  * @brief Registers a lazy singleton service with the locator.
  * @param type The type of the service.
  * @param factory The factory function that creates the service.
  * @return True if the service was registered, false otherwise.
  */
-bool registerLazySingleton(std::type_index type, std::function<std::any()> factory);
+bool registerLazySingleton(const std::type_index &type, std::function<std::any()> factory);
 /**
  * @brief Registers a lazy singleton service with the locator with a contract.
  * @param type The type of the service.
@@ -48,14 +48,14 @@ bool registerLazySingleton(std::type_index type, std::function<std::any()> facto
  * @param factory The factory function that creates the service.
  * @return True if the service was registered, false otherwise.
  */
-bool registerLazySingleton(std::type_index type, const std::string &contract, std::function<std::any()> factory);
+bool registerLazySingleton(const std::type_index &type, const std::string &contract, std::function<std::any()> factory);
 /**
  * @brief Registers a constant service with the locator.
  * @param type The type of the service.
  * @param service The service instance.
  * @return True if the service was registered, false otherwise.
  */
-bool registerConstant(std::type_index type, std::any service);
+bool registerConstant(const std::type_index &type, std::any service);
 /**
  * @brief Registers a constant service with the locator with a contract.
  * @param type The type of the service.
@@ -63,7 +63,7 @@ bool registerConstant(std::type_index type, std::any service);
  * @param service The service instance.
  * @return True if the service was registered, false otherwise.
  */
-bool registerConstant(std::type_index type, const std::string &contract, std::any service);
+bool registerConstant(const std::type_index &type, const std::string &contract, std::any service);
 
 /**
  * @brief Registers a logger with the locator.

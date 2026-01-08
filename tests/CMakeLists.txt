@@ -2,6 +2,7 @@
 # We also need to include the source directory of the library.
 add_executable(pure-ioc-tests
     container-manager-tests.cpp
+    locator-mutable-tests.cpp
 )
 
 target_link_libraries(pure-ioc-tests
