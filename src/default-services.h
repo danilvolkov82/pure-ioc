@@ -62,7 +62,7 @@ using Map = std::unordered_map<Key, V, PairHash, PairEq>;
  * @brief A default implementation of the IServices interface.
  * @internal
  */
-class DefaultServices : public IServices {
+class DefaultServices final : public IServices {
 private:
 
     mutable std::mutex _mutex; ///< Mutex to protect the service maps.

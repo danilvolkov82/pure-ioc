@@ -16,7 +16,7 @@ namespace PureIOC {
  * @brief A default logger implementation that writes to standard output and standard error.
  * @internal
  */
-class DefaultLogger : public ILogger {
+class DefaultLogger final : public ILogger {
 private:
     /**
      * @brief Logs a message to the specified output stream.
@@ -43,37 +43,37 @@ public:
      * @brief Logs a verbose message.
      * @param message The message to log.
      */
-    void verbose(const std::string &message) noexcept override;
+    void verbose(const std::string &message) override;
 
     /**
      * @brief Logs an info message.
      * @param message The message to log.
      */
-    void info(const std::string &message) noexcept override;
+    void info(const std::string &message) override;
 
     /**
      * @brief Logs a warning message.
      * @param message The message to log.
      */
-    void warn(const std::string &message) noexcept override;
+    void warn(const std::string &message) override;
 
     /**
      * @brief Logs an error message.
      * @param message The message to log.
      */
-    void error(const std::string &message) noexcept override;
+    void error(const std::string &message) override;
 
     /**
      * @brief Logs a fatal message.
      * @param message The message to log.
      */
-    void fatal(const std::string &message) noexcept override;
+    void fatal(const std::string &message) override;
 
     /**
      * @brief Logs a debug message.
      * @param message The message to log.
      */
-    void debug(const std::string &message) noexcept override;
+    void debug(const std::string &message) override;
 };
 }
 

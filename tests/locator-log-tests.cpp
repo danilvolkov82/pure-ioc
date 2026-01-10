@@ -26,12 +26,12 @@ public:
 
 class MockLogger final : public PureIOC::ILogger {
 public:
-    MOCK_METHOD(void, verbose, (const std::string &), (noexcept, override));
-    MOCK_METHOD(void, info, (const std::string &), (noexcept, override));
-    MOCK_METHOD(void, warn, (const std::string &), (noexcept, override));
-    MOCK_METHOD(void, error, (const std::string &), (noexcept, override));
-    MOCK_METHOD(void, fatal, (const std::string &), (noexcept, override));
-    MOCK_METHOD(void, debug, (const std::string &), (noexcept, override));
+    MOCK_METHOD(void, verbose, (const std::string &), (override));
+    MOCK_METHOD(void, info, (const std::string &), (override));
+    MOCK_METHOD(void, warn, (const std::string &), (override));
+    MOCK_METHOD(void, error, (const std::string &), (override));
+    MOCK_METHOD(void, fatal, (const std::string &), (override));
+    MOCK_METHOD(void, debug, (const std::string &), (override));
 };
 
 class LocatorLoggerUsageTest : public ::testing::Test {

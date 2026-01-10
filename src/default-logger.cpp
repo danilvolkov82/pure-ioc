@@ -12,31 +12,31 @@ void DefaultLogger::log(const char *level, const std::string &message, std::ostr
 }
 
 void
-DefaultLogger::debug(const std::string &message) noexcept {
-    log("DEBUG", message, std::cout);
+DefaultLogger::debug(const std::string &message) {
+    DefaultLogger::log("DEBUG", message, std::cout);
 }
 
 void
-DefaultLogger::error(const std::string &message) noexcept {
-    log("ERROR", message, std::cerr);
+DefaultLogger::error(const std::string &message) {
+    DefaultLogger::log("ERROR", message, std::cerr);
 }
 
 void
-DefaultLogger::fatal(const std::string &message) noexcept {
-    log("FATAL", message, std::cerr);
+DefaultLogger::fatal(const std::string &message) {
+    DefaultLogger::log("FATAL", message, std::cerr);
 }
 
 void
-DefaultLogger::info(const std::string &message) noexcept {
-    log("INFO", message, std::cout);
+DefaultLogger::info(const std::string &message) {
+    DefaultLogger::log("INFO", message, std::cout);
 }
 
 void
-DefaultLogger::verbose(const std::string &message) noexcept {
-    log("VERBOSE", message, std::cout);
+DefaultLogger::verbose(const std::string &message) {
+    DefaultLogger::log("VERBOSE", message, std::cout);
 }
 
 void 
-DefaultLogger::warn(const std::string &message) noexcept {
-    log("WARN", message, std::cerr);
+DefaultLogger::warn(const std::string &message) {
+    DefaultLogger::log("WARN", message, std::cerr);
 }
