@@ -21,12 +21,12 @@ public:
 
 class DummyLogger final : public PureIOC::ILogger {
 public:
-    void verbose(const std::string &) override {}
-    void info(const std::string &) override {}
-    void warn(const std::string &) override {}
-    void error(const std::string &) override {}
-    void fatal(const std::string &) override {}
-    void debug(const std::string &) override {}
+    void verbose(const std::string &) noexcept override {}
+    void info(const std::string &) noexcept override {}
+    void warn(const std::string &) noexcept override {}
+    void error(const std::string &) noexcept override {}
+    void fatal(const std::string &) noexcept override {}
+    void debug(const std::string &) noexcept override {}
 };
 } // namespace
 

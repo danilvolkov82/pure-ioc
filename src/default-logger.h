@@ -26,7 +26,7 @@ private:
      */
     static void log(const char *level,
                     const std::string &message,
-                    std::ostream &os);
+                    std::ostream &os) noexcept;
 
 public:
     /**
@@ -43,37 +43,37 @@ public:
      * @brief Logs a verbose message.
      * @param message The message to log.
      */
-    void verbose(const std::string &message) override;
+    void verbose(const std::string &message) noexcept override;
 
     /**
      * @brief Logs an info message.
      * @param message The message to log.
      */
-    void info(const std::string &message) override;
+    void info(const std::string &message) noexcept override;
 
     /**
      * @brief Logs a warning message.
      * @param message The message to log.
      */
-    void warn(const std::string &message) override;
+    void warn(const std::string &message) noexcept override;
 
     /**
      * @brief Logs an error message.
      * @param message The message to log.
      */
-    void error(const std::string &message) override;
+    void error(const std::string &message) noexcept override;
 
     /**
      * @brief Logs a fatal message.
      * @param message The message to log.
      */
-    void fatal(const std::string &message) override;
+    void fatal(const std::string &message) noexcept override;
 
     /**
      * @brief Logs a debug message.
      * @param message The message to log.
      */
-    void debug(const std::string &message) override;
+    void debug(const std::string &message) noexcept override;
 };
 }
 

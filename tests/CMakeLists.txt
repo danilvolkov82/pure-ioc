@@ -3,6 +3,7 @@
 add_executable(pure-ioc-tests
     container-manager-tests.cpp
     locator-mutable-tests.cpp
+    locator-log-tests.cpp
 )
 
 target_link_libraries(pure-ioc-tests

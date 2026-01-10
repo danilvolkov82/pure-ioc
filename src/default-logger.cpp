@@ -7,37 +7,36 @@
 #include "default-logger.h"
 
 using namespace PureIOC;
-void
-DefaultLogger::log(const char *level, const std::string &message, std::ostream &os) {
+void DefaultLogger::log(const char *level, const std::string &message, std::ostream &os) noexcept {
     os << "[" << level << "] " << message << '\n';
 }
 
 void
-DefaultLogger::debug(const std::string &message) {
+DefaultLogger::debug(const std::string &message) noexcept {
     log("DEBUG", message, std::cout);
 }
 
 void
-DefaultLogger::error(const std::string &message) {
+DefaultLogger::error(const std::string &message) noexcept {
     log("ERROR", message, std::cerr);
 }
 
 void
-DefaultLogger::fatal(const std::string &message) {
+DefaultLogger::fatal(const std::string &message) noexcept {
     log("FATAL", message, std::cerr);
 }
 
 void
-DefaultLogger::info(const std::string &message) {
+DefaultLogger::info(const std::string &message) noexcept {
     log("INFO", message, std::cout);
 }
 
 void
-DefaultLogger::verbose(const std::string &message) {
+DefaultLogger::verbose(const std::string &message) noexcept {
     log("VERBOSE", message, std::cout);
 }
 
 void 
-DefaultLogger::warn(const std::string &message) {
+DefaultLogger::warn(const std::string &message) noexcept {
     log("WARN", message, std::cerr);
 }

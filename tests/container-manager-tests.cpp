@@ -99,3 +99,20 @@ TEST(ContainerManager, UsesRegisteredContainerMethods) {
     auto container = PureIOC::getContainer();
     container->getService(std::type_index(typeid(int)));
 }
+
+TEST(ContainerManager, RegisterContainerByType) {
+    PureIOC::registerContainer<DummyServices>();
+    auto container = PureIOC::getContainer();
+    ASSERT_NE(container, nullptr);
+}
+
+TEST(ContainerManager, RegisterContainerByFactory) {
+    bool factory_called = false;
+    PureIOC::registerContainer<DummyServices>([&factory_called] {
+        factory_called = true;
+        return std::make_shared<DummyServices>();
+    });
+    auto container = PureIOC::getContainer();
+    ASSERT_NE(container, nullptr);
+    ASSERT_TRUE(factory_called);
+}

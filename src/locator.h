@@ -35,11 +35,11 @@ std::optional<std::any> getService(std::type_index type, const std::string &cont
 template <class T>
 std::shared_ptr<T> getService() {
     std::optional<std::any> service = getService(std::type_index(typeid(T)));
-    if(!service.has_value()) {
+    if (!service.has_value()) {
         return nullptr;
     }
 
-    return std::any_cast<std::shared_ptr<T>>(std::move(service));
+    return std::any_cast<std::shared_ptr<T>>(*service);
 };
 
 /**
@@ -55,7 +55,7 @@ std::shared_ptr<T> getService(const std::string &contract) {
         return nullptr;
     }
 
-    return std::any_cast<std::shared_ptr<T>>(std::move(service));
+    return std::any_cast<std::shared_ptr<T>>(*service);
 };
 }
 #endif //LOCATOR_H
