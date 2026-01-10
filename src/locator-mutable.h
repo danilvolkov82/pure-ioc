@@ -113,7 +113,7 @@ std::function<std::any()> convertFunction(std::function<std::shared_ptr<T>()> fa
  */
 template <class T, class RT>
 bool registerService(std::function<std::shared_ptr<RT>()> factory) {
-    return (std::type_index(typeid(T)), convertFunction<T, RT>(std::move(factory)));
+    return registerService(std::type_index(typeid(T)), convertFunction<T, RT>(std::move(factory)));
 }
 
 /**

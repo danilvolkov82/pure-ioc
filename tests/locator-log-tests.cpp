@@ -5,6 +5,7 @@
 #include <locator.h>
 #include <logger-interface.h>
 #include <services-interface.h>
+#include <enable-logger-interface.h>
 
 namespace {
 
@@ -75,4 +76,18 @@ TEST_F(LocatorLoggerUsageTest, GetServiceReturnsNullptrWhenNoLoggerIsRegistered)
     EXPECT_EQ(logger, nullptr);
 }
 
+
+#include <enable-logger-interface.h>
 } // namespace
+
+TEST_F(LocatorLoggerUsageTest, CanBeUsedByEnableLogger) {
+    auto mock_logger = std::make_shared<MockLogger>();
+    std::shared_ptr<PureIOC::ILogger> logger_interface = mock_logger;
+
+    EXPECT_CALL(*mock_services, getService(testing::Eq(std::type_index(typeid(PureIOC::ILogger)))))
+        .WillOnce(testing::Return(std::any(logger_interface)));
+
+    auto logger = PureIOC::IEnableLogger::logger();
+    ASSERT_NE(logger, nullptr);
+    EXPECT_EQ(logger, mock_logger);
+}

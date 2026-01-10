@@ -1,6 +1,9 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+#include <thread>
+#include <vector>
+
 #include <container-manager.h>
 #include <services-interface.h>
 
@@ -57,10 +60,16 @@ public:
     MOCK_METHOD(void, unregisterService, (const std::type_index &), (override));
     MOCK_METHOD(void, unregisterService, (const std::type_index &, const std::string &), (override));
 };
+
+class ContainerManagerTest : public ::testing::Test {
+protected:
+    void SetUp() override {
+        PureIOC::registerContainer(nullptr);
+    }
+};
 } // namespace
 
-TEST(ContainerManager, DefaultContainerCreatedWhenNullRegistered) {
-    PureIOC::registerContainer(nullptr);
+TEST_F(ContainerManagerTest, DefaultContainerCreatedWhenNullRegistered) {
     auto container = PureIOC::getContainer();
     ASSERT_NE(container, nullptr);
 
@@ -68,7 +77,7 @@ TEST(ContainerManager, DefaultContainerCreatedWhenNullRegistered) {
     EXPECT_EQ(container_again.get(), container.get());
 }
 
-TEST(ContainerManager, UsesRegisteredContainer) {
+TEST_F(ContainerManagerTest, UsesRegisteredContainer) {
     auto custom = std::make_shared<DummyServices>();
     PureIOC::registerContainer(custom);
     auto container = PureIOC::getContainer();
@@ -76,7 +85,7 @@ TEST(ContainerManager, UsesRegisteredContainer) {
     EXPECT_EQ(container.get(), custom.get());
 }
 
-TEST(ContainerManager, NullRegistrationReplacesCustomContainer) {
+TEST_F(ContainerManagerTest, NullRegistrationReplacesCustomContainer) {
     auto custom = std::make_shared<DummyServices>();
     PureIOC::registerContainer(custom);
     auto before_reset = PureIOC::getContainer();
@@ -88,7 +97,7 @@ TEST(ContainerManager, NullRegistrationReplacesCustomContainer) {
     EXPECT_NE(after_reset.get(), custom.get());
 }
 
-TEST(ContainerManager, UsesRegisteredContainerMethods) {
+TEST_F(ContainerManagerTest, UsesRegisteredContainerMethods) {
     auto mock = std::make_shared<MockServices>();
     PureIOC::registerContainer(mock);
 
@@ -100,19 +109,40 @@ TEST(ContainerManager, UsesRegisteredContainerMethods) {
     container->getService(std::type_index(typeid(int)));
 }
 
-TEST(ContainerManager, RegisterContainerByType) {
+TEST_F(ContainerManagerTest, RegisterContainerByType) {
     PureIOC::registerContainer<DummyServices>();
     auto container = PureIOC::getContainer();
     ASSERT_NE(container, nullptr);
 }
 
-TEST(ContainerManager, RegisterContainerByFactory) {
+TEST_F(ContainerManagerTest, RegisterContainerByFactory) {
     bool factory_called = false;
     PureIOC::registerContainer<DummyServices>([&factory_called] {
         factory_called = true;
         return std::make_shared<DummyServices>();
     });
+
     auto container = PureIOC::getContainer();
     ASSERT_NE(container, nullptr);
     ASSERT_TRUE(factory_called);
+}
+
+TEST_F(ContainerManagerTest, ThreadSafety) {
+    std::vector<std::thread> threads;
+    for (int i = 0; i < 10; ++i) {
+        threads.emplace_back([] {
+            auto container1 = PureIOC::getContainer();
+            ASSERT_NE(container1, nullptr);
+
+            auto custom = std::make_shared<DummyServices>();
+            PureIOC::registerContainer(custom);
+
+            auto container2 = PureIOC::getContainer();
+            ASSERT_NE(container2, nullptr);
+        });
+    }
+
+    for (auto &t : threads) {
+        t.join();
+    }
 }

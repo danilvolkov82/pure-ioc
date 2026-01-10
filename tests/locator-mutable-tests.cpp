@@ -28,6 +28,13 @@ public:
     void fatal(const std::string &) noexcept override {}
     void debug(const std::string &) noexcept override {}
 };
+
+struct ITestService {
+    virtual ~ITestService() = default;
+};
+struct TestService : public ITestService {};
+struct AnotherService {};
+
 } // namespace
 
 TEST(LocatorMutable, RegisterServiceForwardsToContainer) {
@@ -133,4 +140,106 @@ TEST(LocatorMutable, RegisterLoggerForwardsToContainer) {
         .WillOnce(testing::Return(true));
 
     EXPECT_TRUE(PureIOC::registerLogger(logger));
+}
+
+// Template functions tests
+TEST(LocatorMutable, TemplateRegisterService) {
+    auto mock = std::make_shared<MockServices>();
+    PureIOC::registerContainer(mock);
+
+    EXPECT_CALL(*mock, registerService(testing::Eq(std::type_index(typeid(ITestService))), testing::_))
+        .Times(1)
+        .WillOnce(testing::Return(true));
+
+    EXPECT_TRUE((PureIOC::registerService<ITestService, TestService>([] {
+        return std::make_shared<TestService>();
+    })));
+}
+
+TEST(LocatorMutable, TemplateRegisterServiceWithContract) {
+    auto mock = std::make_shared<MockServices>();
+    PureIOC::registerContainer(mock);
+
+    EXPECT_CALL(*mock,
+        registerService(testing::Eq(std::type_index(typeid(ITestService))), testing::StrEq("test"), testing::_))
+        .Times(1)
+        .WillOnce(testing::Return(true));
+
+    EXPECT_TRUE((PureIOC::registerService<ITestService, TestService>("test", [] {
+        return std::make_shared<TestService>();
+    })));
+}
+
+TEST(LocatorMutable, TemplateRegisterLazySingleton) {
+    auto mock = std::make_shared<MockServices>();
+    PureIOC::registerContainer(mock);
+
+    EXPECT_CALL(*mock, registerLazySingleton(testing::Eq(std::type_index(typeid(ITestService))), testing::_))
+        .Times(1)
+        .WillOnce(testing::Return(true));
+
+    EXPECT_TRUE((PureIOC::registerLazySingleton<ITestService, TestService>([] {
+        return std::make_shared<TestService>();
+    })));
+}
+
+TEST(LocatorMutable, TemplateRegisterLazySingletonWithContract) {
+    auto mock = std::make_shared<MockServices>();
+    PureIOC::registerContainer(mock);
+
+    EXPECT_CALL(*mock,
+        registerLazySingleton(testing::Eq(std::type_index(typeid(ITestService))), testing::StrEq("test"), testing::_))
+        .Times(1)
+        .WillOnce(testing::Return(true));
+
+    EXPECT_TRUE((PureIOC::registerLazySingleton<ITestService, TestService>("test", [] {
+        return std::make_shared<TestService>();
+    })));
+}
+
+TEST(LocatorMutable, TemplateRegisterConstant) {
+    auto mock = std::make_shared<MockServices>();
+    PureIOC::registerContainer(mock);
+
+    EXPECT_CALL(*mock, registerConstant(testing::Eq(std::type_index(typeid(ITestService))), testing::_))
+        .Times(1)
+        .WillOnce(testing::Return(true));
+
+    EXPECT_TRUE((PureIOC::registerConstant<ITestService, TestService>(std::make_shared<TestService>())));
+}
+
+TEST(LocatorMutable, TemplateRegisterConstantWithContract) {
+    auto mock = std::make_shared<MockServices>();
+    PureIOC::registerContainer(mock);
+
+    EXPECT_CALL(*mock,
+        registerConstant(testing::Eq(std::type_index(typeid(ITestService))), testing::StrEq("test"), testing::_))
+        .Times(1)
+        .WillOnce(testing::Return(true));
+
+    EXPECT_TRUE((PureIOC::registerConstant<ITestService, TestService>("test", std::make_shared<TestService>())));
+}
+
+TEST(LocatorMutable, TemplateRegisterLogger) {
+    auto mock = std::make_shared<MockServices>();
+    PureIOC::registerContainer(mock);
+
+    EXPECT_CALL(*mock, registerConstant(testing::Eq(std::type_index(typeid(PureIOC::ILogger))), testing::_))
+        .Times(1)
+        .WillOnce(testing::Return(true));
+
+    EXPECT_TRUE((PureIOC::registerLogger<DummyLogger>()));
+}
+
+TEST(LocatorMutable, TemplateRegisterLoggerWithFactory) {
+    auto mock = std::make_shared<MockServices>();
+    PureIOC::registerContainer(mock);
+
+    EXPECT_CALL(*mock, registerLazySingleton(testing::Eq(std::type_index(typeid(PureIOC::ILogger))), testing::_))
+        .Times(1)
+        .WillOnce(testing::Return(true));
+
+    EXPECT_TRUE((PureIOC::registerLogger<DummyLogger>([] {
+        return std::make_shared<DummyLogger>();
+    })));
 }

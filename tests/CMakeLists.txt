@@ -4,6 +4,9 @@ add_executable(pure-ioc-tests
     container-manager-tests.cpp
     locator-mutable-tests.cpp
     locator-log-tests.cpp
+    default-logger-tests.cpp
+    default-services-tests.cpp
+    locator-tests.cpp
 )
 
 target_link_libraries(pure-ioc-tests
