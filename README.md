@@ -1,10 +1,10 @@
 # PureIoC
 
-PureIoC is a lightweight, header-only, dependency injection (IoC) container for C++17. It is designed to be simple, easy to use, and non-intrusive.
+PureIoC is a lightweight dependency injection (IoC) container for C++17. It is designed to be simple, easy to use, and non-intrusive.
 
 ## Features
 
-- **Lightweight and Header-Only:** Simply include `pure-ioc.h` in your project.
+- **Static and Shared Libraries:** Can be built as a static or shared library to be linked into your project.
 - **Service Registration:** Register services as transient, lazy singletons, or constants.
 - **Service Retrieval:** Retrieve services by type or by a string-based contract.
 - **Custom Containers:** Implement your own service container by inheriting from `PureIOC::IServices`.
@@ -33,7 +33,7 @@ To build with tests, run the following command:
 
 ### Usage
 
-To use PureIoC in your project, you just need to include the `pure-ioc.h` header file. If you are not using a single-header build, include `locator.h` and `locator-mutable.h`.
+To use PureIoC in your project, you need to build and link against the library. Then, you can include the necessary headers in your code, such as `<pure-ioc/locator.h>`. A single-header file `pure-ioc.h` is also generated for convenience.
 
 Here is a simple example of how to use PureIoC:
 

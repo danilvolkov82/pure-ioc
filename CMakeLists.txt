@@ -13,25 +13,7 @@ set(PURE_IOC_SOURCES
     src/locator.cpp
 )
 
-set(PUBLIC_HEADERS
-    src/container-manager.h
-    src/enable-logger-interface.h
-    src/locator-mutable.h
-    src/locator.h
-    src/logger-interface.h
-    src/services-interface.h
-)
-
-set(PUBLIC_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
-
-set(SINGLE_HEADER_CONTENT "#ifndef PURE_IOC_H\n#define PURE_IOC_H\n\n")
-foreach(HEADER_FILE ${PUBLIC_HEADERS})
-    get_filename_component(HEADER_NAME ${HEADER_FILE} NAME)
-    string(APPEND SINGLE_HEADER_CONTENT "#include \"${HEADER_NAME}\"\n")
-endforeach()
-string(APPEND SINGLE_HEADER_CONTENT "\n#endif // PURE_IOC_H\n")
-string(REPLACE "\\" "\\\\" SINGLE_HEADER_CONTENT_ESCAPED "${SINGLE_HEADER_CONTENT}")
-string(REPLACE "\"" "\\\"" SINGLE_HEADER_CONTENT_ESCAPED "${SINGLE_HEADER_CONTENT_ESCAPED}")
+file(GLOB PUBLIC_HEADERS "src/*.h")
 
 add_library(pure-ioc STATIC ${PURE_IOC_SOURCES})
 set_target_properties(pure-ioc PROPERTIES OUTPUT_NAME pureioc++)
@@ -41,15 +23,11 @@ set_target_properties(pure-ioc-shared PROPERTIES OUTPUT_NAME pureioc++)
 
 target_include_directories(pure-ioc
     PUBLIC
-        ${PUBLIC_INCLUDE_DIR}
-    PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
 target_include_directories(pure-ioc-shared
     PUBLIC
-        ${PUBLIC_INCLUDE_DIR}
-    PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
@@ -58,8 +36,19 @@ install(TARGETS pure-ioc pure-ioc-shared
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin
 )
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/ DESTINATION include FILES_MATCHING PATTERN "*.h")
-install(CODE "file(MAKE_DIRECTORY \"\${CMAKE_INSTALL_PREFIX}/include\")\nfile(WRITE \"\${CMAKE_INSTALL_PREFIX}/include/pure-ioc.h\" \"${SINGLE_HEADER_CONTENT_ESCAPED}\")")
+
+install(FILES ${PUBLIC_HEADERS} DESTINATION include/pure-ioc)
+
+set(SINGLE_HEADER_CONTENT "#ifndef PURE_IOC_H\n#define PURE_IOC_H\n\n")
+foreach(HEADER_FILE ${PUBLIC_HEADERS})
+    get_filename_component(HEADER_NAME ${HEADER_FILE} NAME)
+    string(APPEND SINGLE_HEADER_CONTENT "#include \"pure-ioc/${HEADER_NAME}\"\n")
+endforeach()
+string(APPEND SINGLE_HEADER_CONTENT "\n#endif // PURE_IOC_H\n")
+
+file(WRITE "${CMAKE_BINARY_DIR}/pure-ioc.h" "${SINGLE_HEADER_CONTENT}")
+install(FILES "${CMAKE_BINARY_DIR}/pure-ioc.h" DESTINATION include)
+
 
 option(BUILD_TESTS "Build tests" OFF)
 
