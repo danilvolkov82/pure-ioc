@@ -109,6 +109,10 @@ PureIoC provides a simple logging mechanism.
 - **`registerLogger(logger)`:** Registers a custom logger.
 - **`IEnableLogger`:** An interface for classes that can provide a logger.
 
+To simplify custom logger implementations, `logger-interface.h` exposes helper macros:
+
+- `LOG_METHOD_MESSAGE`, `LOG_METHOD_MESSAGE_AND_EXCEPTION`, `LOG_METHOD_EXCEPTION` for declaring interface methods.
+
 ### Custom Containers
 
 You can provide your own container implementation by inheriting from `PureIOC::IServices` and registering it with `PureIOC::registerContainer`.

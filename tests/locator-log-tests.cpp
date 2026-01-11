@@ -27,12 +27,18 @@ public:
 
 class MockLogger final : public PureIOC::ILogger {
 public:
-    MOCK_METHOD(void, verbose, (const std::string &), (override));
-    MOCK_METHOD(void, info, (const std::string &), (override));
-    MOCK_METHOD(void, warn, (const std::string &), (override));
-    MOCK_METHOD(void, error, (const std::string &), (override));
-    MOCK_METHOD(void, fatal, (const std::string &), (override));
-    MOCK_METHOD(void, debug, (const std::string &), (override));
+    MOCK_METHOD(void, verbose, (const std::string &, const std::string &), (override));
+    MOCK_METHOD(void, info, (const std::string &, const std::string &), (override));
+    MOCK_METHOD(void, warn, (const std::string &, const std::string &), (override));
+    MOCK_METHOD(void, warn, (const std::string &, const std::string &, const std::exception &), (override));
+    MOCK_METHOD(void, warn, (const std::string &, const std::exception &), (override));
+    MOCK_METHOD(void, error, (const std::string &, const std::string &), (override));
+    MOCK_METHOD(void, error, (const std::string &, const std::string &, const std::exception &), (override));
+    MOCK_METHOD(void, error, (const std::string &, const std::exception &), (override));
+    MOCK_METHOD(void, fatal, (const std::string &, const std::string &), (override));
+    MOCK_METHOD(void, fatal, (const std::string &, const std::string &, const std::exception &), (override));
+    MOCK_METHOD(void, fatal, (const std::string &, const std::exception &), (override));
+    MOCK_METHOD(void, debug, (const std::string &, const std::string &), (override));
 };
 
 class LocatorLoggerUsageTest : public ::testing::Test {
@@ -49,6 +55,15 @@ protected:
     std::shared_ptr<MockServices> mock_services;
 };
 
+struct TemplateTagType {};
+
+class EnableLoggerUser final : public PureIOC::IEnableLogger {
+public:
+    void logInfo(const std::string &message) {
+        LOG(info, message);
+    }
+};
+
 TEST_F(LocatorLoggerUsageTest, CanRetrieveAndUseLogger) {
     auto mock_logger = std::make_shared<MockLogger>();
     std::shared_ptr<PureIOC::ILogger> logger_interface = mock_logger;
@@ -62,8 +77,17 @@ TEST_F(LocatorLoggerUsageTest, CanRetrieveAndUseLogger) {
     ASSERT_NE(logger, nullptr);
 
     // Verification: Now that we have the logger, we can use it.
-    EXPECT_CALL(*mock_logger, info(testing::StrEq("Test message"))).Times(1);
-    logger->info("Test message");
+    EXPECT_CALL(*mock_logger, info(testing::StrEq("TestTag"), testing::StrEq("Test message"))).Times(1);
+    logger->info("TestTag", "Test message");
+}
+
+TEST_F(LocatorLoggerUsageTest, TemplateLoggerOverloadUsesTypeTag) {
+    auto mock_logger = std::make_shared<MockLogger>();
+    std::shared_ptr<PureIOC::ILogger> logger_interface = mock_logger;
+
+    EXPECT_CALL(*mock_logger, info(testing::Not(testing::IsEmpty()), testing::StrEq("Test message")))
+        .Times(1);
+    logger_interface->info<TemplateTagType>("Test message");
 }
 
 TEST_F(LocatorLoggerUsageTest, GetServiceReturnsNullptrWhenNoLoggerIsRegistered) {
@@ -90,4 +114,17 @@ TEST_F(LocatorLoggerUsageTest, CanBeUsedByEnableLogger) {
     auto logger = PureIOC::IEnableLogger::logger();
     ASSERT_NE(logger, nullptr);
     EXPECT_EQ(logger, mock_logger);
+}
+
+TEST_F(LocatorLoggerUsageTest, EnableLoggerMacroUsesTagAndMessage) {
+    auto mock_logger = std::make_shared<MockLogger>();
+    std::shared_ptr<PureIOC::ILogger> logger_interface = mock_logger;
+
+    EXPECT_CALL(*mock_services, getService(testing::Eq(std::type_index(typeid(PureIOC::ILogger)))))
+        .WillOnce(testing::Return(std::any(logger_interface)));
+
+    EnableLoggerUser user;
+    EXPECT_CALL(*mock_logger, info(testing::Not(testing::IsEmpty()), testing::StrEq("Test message")))
+        .Times(1);
+    user.logInfo("Test message");
 }

@@ -30,6 +30,13 @@ public:
      * @return A shared pointer to the logger.
      */
     static std::shared_ptr<ILogger> logger();
+#define LOG(level, ...)                                    \
+    do {                                                   \
+        auto logger = IEnableLogger::logger();             \
+        if (logger) {                                      \
+            logger->level(typeid(*this).name(), __VA_ARGS__); \
+        }                                                  \
+    } while (false)
 };
 }
 #endif

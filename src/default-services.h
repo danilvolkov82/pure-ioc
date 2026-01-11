@@ -191,7 +191,7 @@ private:
 
         auto logger = PureIOC::getService<ILogger>();
         if (logger) {
-            logger->warn("Service is already registered with contract");
+            logger->warn<DefaultServices>("Service is already registered with contract");
         }
 
         return false;

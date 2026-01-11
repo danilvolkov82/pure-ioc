@@ -25,42 +25,98 @@ protected:
 
 TEST_F(DefaultLoggerTest, Verbose) {
     auto logger = PureIOC::DefaultLogger();
-    logger.verbose("test message");
-    EXPECT_EQ(cout_buffer.str(), "[VERBOSE] test message\n");
+    logger.verbose("TestTag", "test message");
+    EXPECT_EQ(cout_buffer.str(), "[VERBOSE][TestTag] test message\n");
     EXPECT_TRUE(cerr_buffer.str().empty());
 }
 
 TEST_F(DefaultLoggerTest, Info) {
     auto logger = PureIOC::DefaultLogger();
-    logger.info("test message");
-    EXPECT_EQ(cout_buffer.str(), "[INFO] test message\n");
+    logger.info("TestTag", "test message");
+    EXPECT_EQ(cout_buffer.str(), "[INFO][TestTag] test message\n");
+    EXPECT_TRUE(cerr_buffer.str().empty());
+}
+
+TEST_F(DefaultLoggerTest, InfoTemplateUsesTypeTag) {
+    auto logger = PureIOC::DefaultLogger();
+    logger.info<PureIOC::DefaultLogger>("test message");
+    EXPECT_THAT(cout_buffer.str(), testing::StartsWith("[INFO]["));
+    EXPECT_THAT(cout_buffer.str(), testing::EndsWith("] test message\n"));
     EXPECT_TRUE(cerr_buffer.str().empty());
 }
 
 TEST_F(DefaultLoggerTest, Debug) {
     auto logger = PureIOC::DefaultLogger();
-    logger.debug("test message");
-    EXPECT_EQ(cout_buffer.str(), "[DEBUG] test message\n");
+    logger.debug("TestTag", "test message");
+    EXPECT_EQ(cout_buffer.str(), "[DEBUG][TestTag] test message\n");
     EXPECT_TRUE(cerr_buffer.str().empty());
 }
 
 TEST_F(DefaultLoggerTest, Warn) {
     auto logger = PureIOC::DefaultLogger();
-    logger.warn("test message");
-    EXPECT_EQ(cerr_buffer.str(), "[WARN] test message\n");
+    logger.warn("TestTag", "test message");
+    EXPECT_EQ(cerr_buffer.str(), "[WARN][TestTag] test message\n");
+    EXPECT_TRUE(cout_buffer.str().empty());
+}
+
+TEST_F(DefaultLoggerTest, WarnWithException) {
+    auto logger = PureIOC::DefaultLogger();
+    std::runtime_error error("boom");
+    logger.warn("TestTag", "test message", error);
+    EXPECT_EQ(cerr_buffer.str(), "[WARN][TestTag] test message Details: boom\n");
+    EXPECT_TRUE(cout_buffer.str().empty());
+}
+
+TEST_F(DefaultLoggerTest, WarnExceptionOnly) {
+    auto logger = PureIOC::DefaultLogger();
+    std::runtime_error error("boom");
+    logger.warn("TestTag", error);
+    EXPECT_EQ(cerr_buffer.str(), "[WARN][TestTag] boom\n");
     EXPECT_TRUE(cout_buffer.str().empty());
 }
 
 TEST_F(DefaultLoggerTest, Error) {
     auto logger = PureIOC::DefaultLogger();
-    logger.error("test message");
-    EXPECT_EQ(cerr_buffer.str(), "[ERROR] test message\n");
+    logger.error("TestTag", "test message");
+    EXPECT_EQ(cerr_buffer.str(), "[ERROR][TestTag] test message\n");
+    EXPECT_TRUE(cout_buffer.str().empty());
+}
+
+TEST_F(DefaultLoggerTest, ErrorWithException) {
+    auto logger = PureIOC::DefaultLogger();
+    std::runtime_error error("boom");
+    logger.error("TestTag", "test message", error);
+    EXPECT_EQ(cerr_buffer.str(), "[ERROR][TestTag] test message Details: boom\n");
+    EXPECT_TRUE(cout_buffer.str().empty());
+}
+
+TEST_F(DefaultLoggerTest, ErrorExceptionOnly) {
+    auto logger = PureIOC::DefaultLogger();
+    std::runtime_error error("boom");
+    logger.error("TestTag", error);
+    EXPECT_EQ(cerr_buffer.str(), "[ERROR][TestTag] boom\n");
     EXPECT_TRUE(cout_buffer.str().empty());
 }
 
 TEST_F(DefaultLoggerTest, Fatal) {
     auto logger = PureIOC::DefaultLogger();
-    logger.fatal("test message");
-    EXPECT_EQ(cerr_buffer.str(), "[FATAL] test message\n");
+    logger.fatal("TestTag", "test message");
+    EXPECT_EQ(cerr_buffer.str(), "[FATAL][TestTag] test message\n");
+    EXPECT_TRUE(cout_buffer.str().empty());
+}
+
+TEST_F(DefaultLoggerTest, FatalWithException) {
+    auto logger = PureIOC::DefaultLogger();
+    std::runtime_error error("boom");
+    logger.fatal("TestTag", "test message", error);
+    EXPECT_EQ(cerr_buffer.str(), "[FATAL][TestTag] test message Details: boom\n");
+    EXPECT_TRUE(cout_buffer.str().empty());
+}
+
+TEST_F(DefaultLoggerTest, FatalExceptionOnly) {
+    auto logger = PureIOC::DefaultLogger();
+    std::runtime_error error("boom");
+    logger.fatal("TestTag", error);
+    EXPECT_EQ(cerr_buffer.str(), "[FATAL][TestTag] boom\n");
     EXPECT_TRUE(cout_buffer.str().empty());
 }

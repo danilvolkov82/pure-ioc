@@ -25,10 +25,18 @@ private:
      * @param os The output stream.
      */
     static void log(const char *level,
+                    const std::string &tag,
                     const std::string &message,
                     std::ostream &os) noexcept;
 
 public:
+    using ILogger::verbose;
+    using ILogger::info;
+    using ILogger::warn;
+    using ILogger::error;
+    using ILogger::fatal;
+    using ILogger::debug;
+
     /**
      * @brief Default constructor.
      */
@@ -43,37 +51,76 @@ public:
      * @brief Logs a verbose message.
      * @param message The message to log.
      */
-    void verbose(const std::string &message) override;
+    LOG_METHOD_MESSAGE(verbose) override;
 
     /**
      * @brief Logs an info message.
      * @param message The message to log.
      */
-    void info(const std::string &message) override;
+    LOG_METHOD_MESSAGE(info) override;
 
     /**
      * @brief Logs a warning message.
      * @param message The message to log.
      */
-    void warn(const std::string &message) override;
+    LOG_METHOD_MESSAGE(warn) override;
+    
+    /**
+     * @brief Logs a warning message with exception details.
+     * @param message The message to log.
+     * @param e The exception to log.
+     */
+    LOG_METHOD_MESSAGE_AND_EXCEPTION(warn) override;
+
+    /**
+     * @brief Logs a warning exception.
+     * @param e The exception to log.
+     */
+    LOG_METHOD_EXCEPTION(warn) override;
 
     /**
      * @brief Logs an error message.
      * @param message The message to log.
      */
-    void error(const std::string &message) override;
+    LOG_METHOD_MESSAGE(error) override;
+
+    /**
+     * @brief Logs an error message with exception details.
+     * @param message The contextual message to log.
+     * @param e The exception to log.
+     */
+    LOG_METHOD_MESSAGE_AND_EXCEPTION(error) override;
+
+    /**
+     * @brief Logs an error exception.
+     * @param e The exception to log.
+     */
+    LOG_METHOD_EXCEPTION(error) override;
 
     /**
      * @brief Logs a fatal message.
      * @param message The message to log.
      */
-    void fatal(const std::string &message) override;
+    LOG_METHOD_MESSAGE(fatal) override;
+    
+    /**
+     * @brief Logs a fatal message with exception details.
+     * @param message The contextual message to log.
+     * @param e The exception to log.
+     */
+    LOG_METHOD_MESSAGE_AND_EXCEPTION(fatal) override;
+
+    /**
+     * @brief Logs a fatal exception.
+     * @param e The exception to log.
+     */
+    LOG_METHOD_EXCEPTION(fatal) override;
 
     /**
      * @brief Logs a debug message.
      * @param message The message to log.
      */
-    void debug(const std::string &message) override;
+    LOG_METHOD_MESSAGE(debug) override;
 };
 }
 
