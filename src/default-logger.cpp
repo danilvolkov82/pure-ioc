@@ -4,6 +4,10 @@
  * @internal
  */
 
+#include <iostream>
+#include <chrono>
+#include <ctime>
+#include <iomanip>
 #include "default-logger.h"
 
 using namespace PureIOC;
@@ -11,7 +15,9 @@ void DefaultLogger::log(const char *level,
                         const std::string &tag,
                         const std::string &message,
                         std::ostream &os) noexcept {
-    os << "[" << level << "][" << tag << "] " << message << '\n';
+    auto now = std::chrono::system_clock::now();
+    auto in_time_t = std::chrono::system_clock::to_time_t(now);
+    os << std::put_time(std::localtime(&in_time_t), "[%Y-%m-%d %X]") << "[" << level << "][" << tag << "] " << message << '\n';
 }
 
 LOG_METHOD_MESSAGE(DefaultLogger::debug) {
