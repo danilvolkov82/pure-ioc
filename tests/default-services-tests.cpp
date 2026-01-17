@@ -2,6 +2,7 @@
 #include <gmock/gmock.h>
 #include <string>
 #include <memory>
+#include <type_traits>
 #include <default-services.h>
 
 struct TestService {
@@ -23,6 +24,11 @@ class DefaultServicesTest : public ::testing::Test {
 protected:
     PureIOC::DefaultServices services;
 };
+
+static_assert(!std::is_copy_constructible_v<PureIOC::DefaultServices>);
+static_assert(!std::is_copy_assignable_v<PureIOC::DefaultServices>);
+static_assert(!std::is_move_constructible_v<PureIOC::DefaultServices>);
+static_assert(!std::is_move_assignable_v<PureIOC::DefaultServices>);
 
 TEST_F(DefaultServicesTest, RegisterAndGetService) {
     services.registerService(typeid(TestService), [] {

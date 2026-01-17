@@ -17,18 +17,6 @@ namespace PureIOC {
  * @internal
  */
 class DefaultLogger final : public ILogger {
-private:
-    /**
-     * @brief Logs a message to the specified output stream.
-     * @param level The log level.
-     * @param message The message to log.
-     * @param os The output stream.
-     */
-    static void log(const char *level,
-                    const std::string &tag,
-                    const std::string &message,
-                    std::ostream &os) noexcept;
-
 public:
     using ILogger::verbose;
     using ILogger::info;
