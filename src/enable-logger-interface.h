@@ -30,11 +30,20 @@ public:
      * @return A shared pointer to the logger.
      */
     static std::shared_ptr<ILogger> logger();
+
 #define LOG(level, ...)                                    \
     do {                                                   \
-        auto logger = IEnableLogger::logger();             \
+        auto logger = PureIOC::IEnableLogger::logger();    \
         if (logger) {                                      \
             logger->level(typeid(*this).name(), __VA_ARGS__); \
+        }                                                  \
+    } while (false)
+
+#define LOG_EXT(obj, level, ...)                           \
+    do {                                                   \
+        auto logger = PureIOC::IEnableLogger::logger();    \
+        if (logger) {                                      \
+            logger->level(typeid(*obj).name(), __VA_ARGS__); \
         }                                                  \
     } while (false)
 };
