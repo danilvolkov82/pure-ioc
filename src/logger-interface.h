@@ -8,7 +8,7 @@ namespace PureIOC {
 #define LOG_METHOD_MESSAGE(name) \
     void name(std::string_view tag, std::string_view message)
 #define LOG_METHOD_MESSAGE_AND_EXCEPTION(name) \
-    void name(std::string_view tag, std::string_view message,const std::exception_ptr e)
+    void name(std::string_view tag, std::string_view message, const std::exception_ptr &e)
 #define LOG_METHOD_EXCEPTION(name) \
     void name(std::string_view tag, const std::exception_ptr &e)
 
@@ -98,7 +98,7 @@ void mname(std::string_view message) {    \
 }
 #define LOG_TEMPLATE_MESSAGE_AND_EXCEPTION(mname)                 \
 template <class T>                                                \
-void mname(std::string_view message, const std::exception_ptr e) { \
+void mname(std::string_view message, const std::exception_ptr &e) { \
     this->mname(typeid(T).name(), message, e);                    \
 }
 #define LOG_TEMPLATE_EXCEPTION(mname) \

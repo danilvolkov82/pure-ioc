@@ -14,7 +14,7 @@ std::shared_ptr<ILogger>
 IEnableLogger::logger() {
     std::shared_ptr<ILogger> logger = getService<ILogger>();
     if(!logger) {
-        registerLogger<DefaultLogger>();
+        registerLogger<internal::DefaultLogger>();
         logger = getService<ILogger>();
     }
 

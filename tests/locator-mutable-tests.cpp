@@ -24,13 +24,13 @@ public:
     void verbose(std::string_view, std::string_view) override {}
     void info(std::string_view, std::string_view) override {}
     void warn(std::string_view, std::string_view) override {}
-    void warn(std::string_view, std::string_view, std::exception_ptr) override {}
+    void warn(std::string_view, std::string_view, const std::exception_ptr &) override {}
     void warn(std::string_view, const std::exception_ptr &) override {}
     void error(std::string_view, std::string_view) override {}
-    void error(std::string_view, std::string_view, std::exception_ptr) override {}
+    void error(std::string_view, std::string_view, const std::exception_ptr &) override {}
     void error(std::string_view, const std::exception_ptr &) override {}
     void fatal(std::string_view, std::string_view) override {}
-    void fatal(std::string_view, std::string_view, std::exception_ptr) override {}
+    void fatal(std::string_view, std::string_view, const std::exception_ptr &) override {}
     void fatal(std::string_view, const std::exception_ptr &) override {}
     void debug(std::string_view, std::string_view) override {}
 };

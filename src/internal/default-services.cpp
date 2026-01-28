@@ -14,8 +14,6 @@
 #include <locator.h>
 #include <logger-interface.h>
 
-using namespace PureIOC;
-
 namespace {
 
 /**
@@ -57,6 +55,7 @@ using Map = std::unordered_map<Key, V, PairHash, PairEq>;
 
 } // namespace
 
+namespace PureIOC::internal {
 struct DefaultServices::Impl {
     mutable std::shared_mutex mutex;
     mutable Map<std::any> services;
@@ -77,7 +76,7 @@ struct DefaultServices::Impl {
             return true;
         }
 
-        auto logger = PureIOC::getService<ILogger>();
+        auto logger = ::PureIOC::getService<::PureIOC::ILogger>();
         if (logger) {
             logger->warn<DefaultServices>("Service is already registered with contract");
         }
@@ -93,7 +92,7 @@ struct DefaultServices::Impl {
             return true;
         }
 
-        auto logger = PureIOC::getService<ILogger>();
+        auto logger = ::PureIOC::getService<::PureIOC::ILogger>();
         if (logger) {
             logger->warn<DefaultServices>("Service is already registered with contract");
         }
@@ -337,4 +336,5 @@ DefaultServices::Impl::unregisterService(const Key &key) {
     singleton_factories.erase(key);
     singleton_once_flags.erase(key);
     factories.erase(key);
+}
 }

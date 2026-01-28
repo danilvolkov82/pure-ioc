@@ -22,13 +22,13 @@ struct AnotherTestServiceImpl : public AnotherTestService {};
 
 class DefaultServicesTest : public ::testing::Test {
 protected:
-    PureIOC::DefaultServices services;
+    PureIOC::internal::DefaultServices services;
 };
 
-static_assert(!std::is_copy_constructible_v<PureIOC::DefaultServices>);
-static_assert(!std::is_copy_assignable_v<PureIOC::DefaultServices>);
-static_assert(!std::is_move_constructible_v<PureIOC::DefaultServices>);
-static_assert(!std::is_move_assignable_v<PureIOC::DefaultServices>);
+static_assert(!std::is_copy_constructible_v<PureIOC::internal::DefaultServices>);
+static_assert(!std::is_copy_assignable_v<PureIOC::internal::DefaultServices>);
+static_assert(!std::is_move_constructible_v<PureIOC::internal::DefaultServices>);
+static_assert(!std::is_move_assignable_v<PureIOC::internal::DefaultServices>);
 
 TEST_F(DefaultServicesTest, RegisterAndGetService) {
     services.registerService(typeid(TestService), [] {

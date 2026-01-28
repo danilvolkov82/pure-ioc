@@ -17,7 +17,7 @@
 
 #include "services-interface.h"
 
-namespace PureIOC {
+namespace PureIOC::internal {
 
 /**
  * @class DefaultServices

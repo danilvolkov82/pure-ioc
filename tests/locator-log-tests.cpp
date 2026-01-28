@@ -31,13 +31,13 @@ public:
     MOCK_METHOD(void, verbose, (std::string_view, std::string_view), (override));
     MOCK_METHOD(void, info, (std::string_view, std::string_view), (override));
     MOCK_METHOD(void, warn, (std::string_view, std::string_view), (override));
-    MOCK_METHOD(void, warn, (std::string_view, std::string_view, std::exception_ptr), (override));
+    MOCK_METHOD(void, warn, (std::string_view, std::string_view, const std::exception_ptr &), (override));
     MOCK_METHOD(void, warn, (std::string_view, const std::exception_ptr &), (override));
     MOCK_METHOD(void, error, (std::string_view, std::string_view), (override));
-    MOCK_METHOD(void, error, (std::string_view, std::string_view, std::exception_ptr), (override));
+    MOCK_METHOD(void, error, (std::string_view, std::string_view, const std::exception_ptr &), (override));
     MOCK_METHOD(void, error, (std::string_view, const std::exception_ptr &), (override));
     MOCK_METHOD(void, fatal, (std::string_view, std::string_view), (override));
-    MOCK_METHOD(void, fatal, (std::string_view, std::string_view, std::exception_ptr), (override));
+    MOCK_METHOD(void, fatal, (std::string_view, std::string_view, const std::exception_ptr &), (override));
     MOCK_METHOD(void, fatal, (std::string_view, const std::exception_ptr &), (override));
     MOCK_METHOD(void, debug, (std::string_view, std::string_view), (override));
 };

@@ -12,8 +12,6 @@
 #include <string>
 #include "internal/default-logger.h"
 
-using namespace PureIOC;
-
 namespace {
 std::string exception_message(const std::exception_ptr &e) {
     if (!e) {
@@ -39,6 +37,7 @@ void log(const char *level,
     os << std::put_time(std::localtime(&in_time_t), "[%Y-%m-%d %X]") << "[" << level << "][" << tag << "] " << message << '\n';
 }
 
+namespace PureIOC::internal {
 LOG_METHOD_MESSAGE(DefaultLogger::debug) {
     log("DEBUG", tag, message, std::cout);
 }
@@ -88,4 +87,5 @@ LOG_METHOD_MESSAGE_AND_EXCEPTION(DefaultLogger::warn) {
 
 LOG_METHOD_EXCEPTION(DefaultLogger::warn) {
     log("WARN", tag, exception_message(e), std::cerr);
+}
 }
