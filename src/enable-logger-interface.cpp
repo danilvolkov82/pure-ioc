@@ -6,7 +6,7 @@
 #include "enable-logger-interface.h"
 #include "locator.h"
 #include "locator-mutable.h"
-#include "default-logger.h"
+#include "internal/default-logger.h"
 
 using namespace PureIOC;
 

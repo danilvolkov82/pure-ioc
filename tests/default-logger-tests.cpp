@@ -2,8 +2,10 @@
 #include <gmock/gmock.h>
 #include <iostream>
 #include <sstream>
+#include <exception>
+#include <stdexcept>
 
-#include <default-logger.h>
+#include <internal/default-logger.h>
 
 class DefaultLoggerTest : public ::testing::Test {
 protected:
@@ -60,16 +62,16 @@ TEST_F(DefaultLoggerTest, Warn) {
 
 TEST_F(DefaultLoggerTest, WarnWithException) {
     auto logger = PureIOC::DefaultLogger();
-    std::runtime_error error("boom");
-    logger.warn("TestTag", "test message", error);
+    auto ex = std::make_exception_ptr(std::runtime_error("boom"));
+    logger.warn("TestTag", "test message", ex);
     EXPECT_THAT(cerr_buffer.str(), testing::ContainsRegex("\\[WARN\\]\\[TestTag\\] test message Details: boom"));
     EXPECT_TRUE(cout_buffer.str().empty());
 }
 
 TEST_F(DefaultLoggerTest, WarnExceptionOnly) {
     auto logger = PureIOC::DefaultLogger();
-    std::runtime_error error("boom");
-    logger.warn("TestTag", error);
+    auto ex = std::make_exception_ptr(std::runtime_error("boom"));
+    logger.warn("TestTag", ex);
     EXPECT_THAT(cerr_buffer.str(), testing::ContainsRegex("\\[WARN\\]\\[TestTag\\] boom"));
     EXPECT_TRUE(cout_buffer.str().empty());
 }
@@ -83,16 +85,16 @@ TEST_F(DefaultLoggerTest, Error) {
 
 TEST_F(DefaultLoggerTest, ErrorWithException) {
     auto logger = PureIOC::DefaultLogger();
-    std::runtime_error error("boom");
-    logger.error("TestTag", "test message", error);
+    auto ex = std::make_exception_ptr(std::runtime_error("boom"));
+    logger.error("TestTag", "test message", ex);
     EXPECT_THAT(cerr_buffer.str(), testing::ContainsRegex("\\[ERROR\\]\\[TestTag\\] test message Details: boom"));
     EXPECT_TRUE(cout_buffer.str().empty());
 }
 
 TEST_F(DefaultLoggerTest, ErrorExceptionOnly) {
     auto logger = PureIOC::DefaultLogger();
-    std::runtime_error error("boom");
-    logger.error("TestTag", error);
+    auto ex = std::make_exception_ptr(std::runtime_error("boom"));
+    logger.error("TestTag", ex);
     EXPECT_THAT(cerr_buffer.str(), testing::ContainsRegex("\\[ERROR\\]\\[TestTag\\] boom"));
     EXPECT_TRUE(cout_buffer.str().empty());
 }
@@ -106,16 +108,16 @@ TEST_F(DefaultLoggerTest, Fatal) {
 
 TEST_F(DefaultLoggerTest, FatalWithException) {
     auto logger = PureIOC::DefaultLogger();
-    std::runtime_error error("boom");
-    logger.fatal("TestTag", "test message", error);
+    auto ex = std::make_exception_ptr(std::runtime_error("boom"));
+    logger.fatal("TestTag", "test message", ex);
     EXPECT_THAT(cerr_buffer.str(), testing::ContainsRegex("\\[FATAL\\]\\[TestTag\\] test message Details: boom"));
     EXPECT_TRUE(cout_buffer.str().empty());
 }
 
 TEST_F(DefaultLoggerTest, FatalExceptionOnly) {
     auto logger = PureIOC::DefaultLogger();
-    std::runtime_error error("boom");
-    logger.fatal("TestTag", error);
+    auto ex = std::make_exception_ptr(std::runtime_error("boom"));
+    logger.fatal("TestTag", ex);
     EXPECT_THAT(cerr_buffer.str(), testing::ContainsRegex("\\[FATAL\\]\\[TestTag\\] boom"));
     EXPECT_TRUE(cout_buffer.str().empty());
 }

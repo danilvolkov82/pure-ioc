@@ -4,16 +4,35 @@
  * @internal
  */
 
-#include <iostream>
 #include <chrono>
 #include <ctime>
+#include <exception>
 #include <iomanip>
-#include "default-logger.h"
+#include <iostream>
+#include <string>
+#include "internal/default-logger.h"
 
 using namespace PureIOC;
+
+namespace {
+std::string exception_message(const std::exception_ptr &e) {
+    if (!e) {
+        return "Unknown exception";
+    }
+
+    try {
+        std::rethrow_exception(e);
+    } catch (const std::exception &ex) {
+        return ex.what();
+    } catch (...) {
+        return "Unknown exception";
+    }
+}
+}
+
 void log(const char *level,
-                        const std::string &tag,
-                        const std::string &message,
+                        std::string_view tag,
+                        std::string_view message,
                         std::ostream &os) noexcept {
     auto now = std::chrono::system_clock::now();
     auto in_time_t = std::chrono::system_clock::to_time_t(now);
@@ -29,12 +48,12 @@ LOG_METHOD_MESSAGE(DefaultLogger::error) {
 }
 
 LOG_METHOD_MESSAGE_AND_EXCEPTION(DefaultLogger::error) {
-    std::string custom_message = message + " Details: " + e.what();
+    std::string custom_message = std::string(message) + " Details: " + exception_message(e);
     log("ERROR", tag, custom_message, std::cerr);
 }
 
 LOG_METHOD_EXCEPTION(DefaultLogger::error) {
-    log("ERROR", tag, e.what(), std::cerr);
+    log("ERROR", tag, exception_message(e), std::cerr);
 }
 
 LOG_METHOD_MESSAGE(DefaultLogger::fatal) {
@@ -42,12 +61,12 @@ LOG_METHOD_MESSAGE(DefaultLogger::fatal) {
 }
 
 LOG_METHOD_MESSAGE_AND_EXCEPTION(DefaultLogger::fatal) {
-    std::string custom_message = message + " Details: " + e.what();
+    std::string custom_message = std::string(message) + " Details: " + exception_message(e);
     log("FATAL", tag, custom_message, std::cerr);
 }
 
 LOG_METHOD_EXCEPTION(DefaultLogger::fatal) {
-    log("FATAL", tag, e.what(), std::cerr);
+    log("FATAL", tag, exception_message(e), std::cerr);
 }
 
 LOG_METHOD_MESSAGE(DefaultLogger::info) {
@@ -63,10 +82,10 @@ LOG_METHOD_MESSAGE(DefaultLogger::warn) {
 }
 
 LOG_METHOD_MESSAGE_AND_EXCEPTION(DefaultLogger::warn) {
-    std::string custom_message = message + " Details: " + e.what();
+    std::string custom_message = std::string(message) + " Details: " + exception_message(e);
     log("WARN", tag, custom_message, std::cerr);
 }
 
 LOG_METHOD_EXCEPTION(DefaultLogger::warn) {
-    log("WARN", tag, e.what(), std::cerr);
+    log("WARN", tag, exception_message(e), std::cerr);
 }

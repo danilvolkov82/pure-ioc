@@ -1,16 +1,16 @@
 #ifndef LOGGER_INTERFACE_H
 #define LOGGER_INTERFACE_H
-#include <string>
+#include <string_view>
 #include <exception>
 #include <typeinfo>
 
 namespace PureIOC {
 #define LOG_METHOD_MESSAGE(name) \
-    void name(const std::string &tag, const std::string &message)
+    void name(std::string_view tag, std::string_view message)
 #define LOG_METHOD_MESSAGE_AND_EXCEPTION(name) \
-    void name(const std::string &tag, const std::string &message, const std::exception &e)
+    void name(std::string_view tag, std::string_view message,const std::exception_ptr e)
 #define LOG_METHOD_EXCEPTION(name) \
-    void name(const std::string &tag, const std::exception &e)
+    void name(std::string_view tag, const std::exception_ptr &e)
 
 /**
  * @brief An interface for logging.
@@ -93,17 +93,17 @@ public:
 
 #define LOG_TEMPLATE_MESSAGE(mname)         \
 template <class T>                          \
-void mname(const std::string &message) {    \
+void mname(std::string_view message) {    \
     this->mname(typeid(T).name(), message); \
 }
 #define LOG_TEMPLATE_MESSAGE_AND_EXCEPTION(mname)                 \
 template <class T>                                                \
-void mname(const std::string &message, const std::exception &e) { \
+void mname(std::string_view message, const std::exception_ptr e) { \
     this->mname(typeid(T).name(), message, e);                    \
 }
 #define LOG_TEMPLATE_EXCEPTION(mname) \
 template <class T>                    \
-void mname(const std::exception &e) { \
+void mname(const std::exception_ptr &e) { \
     this->mname(typeid(T).name(), e); \
 }
 

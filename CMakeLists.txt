@@ -6,9 +6,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(PURE_IOC_SOURCES
     src/container-manager.cpp
-    src/default-logger.cpp
-    src/default-services.cpp
     src/enable-logger-interface.cpp
+    src/internal/default-logger.cpp
+    src/internal/default-services.cpp
     src/locator-mutable.cpp
     src/locator.cpp
 )

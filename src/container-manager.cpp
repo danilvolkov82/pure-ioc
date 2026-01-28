@@ -6,7 +6,7 @@
 #include <mutex>
 
 #include "container-manager.h"
-#include "default-services.h"
+#include "internal/default-services.h"
 
 namespace PureIOC {
 namespace {

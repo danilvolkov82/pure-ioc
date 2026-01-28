@@ -1,5 +1,6 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <string_view>
 
 #include <container-manager.h>
 #include <locator.h>
@@ -27,18 +28,18 @@ public:
 
 class MockLogger final : public PureIOC::ILogger {
 public:
-    MOCK_METHOD(void, verbose, (const std::string &, const std::string &), (override));
-    MOCK_METHOD(void, info, (const std::string &, const std::string &), (override));
-    MOCK_METHOD(void, warn, (const std::string &, const std::string &), (override));
-    MOCK_METHOD(void, warn, (const std::string &, const std::string &, const std::exception &), (override));
-    MOCK_METHOD(void, warn, (const std::string &, const std::exception &), (override));
-    MOCK_METHOD(void, error, (const std::string &, const std::string &), (override));
-    MOCK_METHOD(void, error, (const std::string &, const std::string &, const std::exception &), (override));
-    MOCK_METHOD(void, error, (const std::string &, const std::exception &), (override));
-    MOCK_METHOD(void, fatal, (const std::string &, const std::string &), (override));
-    MOCK_METHOD(void, fatal, (const std::string &, const std::string &, const std::exception &), (override));
-    MOCK_METHOD(void, fatal, (const std::string &, const std::exception &), (override));
-    MOCK_METHOD(void, debug, (const std::string &, const std::string &), (override));
+    MOCK_METHOD(void, verbose, (std::string_view, std::string_view), (override));
+    MOCK_METHOD(void, info, (std::string_view, std::string_view), (override));
+    MOCK_METHOD(void, warn, (std::string_view, std::string_view), (override));
+    MOCK_METHOD(void, warn, (std::string_view, std::string_view, std::exception_ptr), (override));
+    MOCK_METHOD(void, warn, (std::string_view, const std::exception_ptr &), (override));
+    MOCK_METHOD(void, error, (std::string_view, std::string_view), (override));
+    MOCK_METHOD(void, error, (std::string_view, std::string_view, std::exception_ptr), (override));
+    MOCK_METHOD(void, error, (std::string_view, const std::exception_ptr &), (override));
+    MOCK_METHOD(void, fatal, (std::string_view, std::string_view), (override));
+    MOCK_METHOD(void, fatal, (std::string_view, std::string_view, std::exception_ptr), (override));
+    MOCK_METHOD(void, fatal, (std::string_view, const std::exception_ptr &), (override));
+    MOCK_METHOD(void, debug, (std::string_view, std::string_view), (override));
 };
 
 class LocatorLoggerUsageTest : public ::testing::Test {
@@ -77,7 +78,9 @@ TEST_F(LocatorLoggerUsageTest, CanRetrieveAndUseLogger) {
     ASSERT_NE(logger, nullptr);
 
     // Verification: Now that we have the logger, we can use it.
-    EXPECT_CALL(*mock_logger, info(testing::StrEq("TestTag"), testing::StrEq("Test message"))).Times(1);
+    EXPECT_CALL(*mock_logger, info(testing::Eq(std::string_view("TestTag")),
+        testing::Eq(std::string_view("Test message"))))
+        .Times(1);
     logger->info("TestTag", "Test message");
 }
 
@@ -85,7 +88,8 @@ TEST_F(LocatorLoggerUsageTest, TemplateLoggerOverloadUsesTypeTag) {
     auto mock_logger = std::make_shared<MockLogger>();
     std::shared_ptr<PureIOC::ILogger> logger_interface = mock_logger;
 
-    EXPECT_CALL(*mock_logger, info(testing::Not(testing::IsEmpty()), testing::StrEq("Test message")))
+    EXPECT_CALL(*mock_logger, info(testing::Not(testing::IsEmpty()),
+        testing::Eq(std::string_view("Test message"))))
         .Times(1);
     logger_interface->info<TemplateTagType>("Test message");
 }
@@ -124,7 +128,8 @@ TEST_F(LocatorLoggerUsageTest, EnableLoggerMacroUsesTagAndMessage) {
         .WillOnce(testing::Return(std::any(logger_interface)));
 
     EnableLoggerUser user;
-    EXPECT_CALL(*mock_logger, info(testing::Not(testing::IsEmpty()), testing::StrEq("Test message")))
+    EXPECT_CALL(*mock_logger, info(testing::Not(testing::IsEmpty()),
+        testing::Eq(std::string_view("Test message"))))
         .Times(1);
     user.logInfo("Test message");
 }

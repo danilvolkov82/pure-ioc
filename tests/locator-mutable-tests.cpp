@@ -21,18 +21,18 @@ public:
 
 class DummyLogger final : public PureIOC::ILogger {
 public:
-    void verbose(const std::string &, const std::string &) override {}
-    void info(const std::string &, const std::string &) override {}
-    void warn(const std::string &, const std::string &) override {}
-    void warn(const std::string &, const std::string &, const std::exception &) override {}
-    void warn(const std::string &, const std::exception &) override {}
-    void error(const std::string &, const std::string &) override {}
-    void error(const std::string &, const std::string &, const std::exception &) override {}
-    void error(const std::string &, const std::exception &) override {}
-    void fatal(const std::string &, const std::string &) override {}
-    void fatal(const std::string &, const std::string &, const std::exception &) override {}
-    void fatal(const std::string &, const std::exception &) override {}
-    void debug(const std::string &, const std::string &) override {}
+    void verbose(std::string_view, std::string_view) override {}
+    void info(std::string_view, std::string_view) override {}
+    void warn(std::string_view, std::string_view) override {}
+    void warn(std::string_view, std::string_view, std::exception_ptr) override {}
+    void warn(std::string_view, const std::exception_ptr &) override {}
+    void error(std::string_view, std::string_view) override {}
+    void error(std::string_view, std::string_view, std::exception_ptr) override {}
+    void error(std::string_view, const std::exception_ptr &) override {}
+    void fatal(std::string_view, std::string_view) override {}
+    void fatal(std::string_view, std::string_view, std::exception_ptr) override {}
+    void fatal(std::string_view, const std::exception_ptr &) override {}
+    void debug(std::string_view, std::string_view) override {}
 };
 
 struct ITestService {
