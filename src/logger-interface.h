@@ -5,12 +5,18 @@
 #include <typeinfo>
 
 namespace PureIOC {
+#ifndef LOG_METHOD_MESSAGE
 #define LOG_METHOD_MESSAGE(name) \
     void name(std::string_view tag, std::string_view message)
+#endif
+#ifndef LOG_METHOD_MESSAGE_AND_EXCEPTION
 #define LOG_METHOD_MESSAGE_AND_EXCEPTION(name) \
     void name(std::string_view tag, std::string_view message, const std::exception_ptr &e)
+#endif
+#ifndef LOG_METHOD_EXCEPTION
 #define LOG_METHOD_EXCEPTION(name) \
     void name(std::string_view tag, const std::exception_ptr &e)
+#endif
 
 /**
  * @brief An interface for logging.
