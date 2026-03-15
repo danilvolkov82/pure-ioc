@@ -124,7 +124,7 @@ bool registerService(std::function<std::shared_ptr<RT>()> factory) {
  */
 template <class T>
 bool registerService(std::function<std::shared_ptr<T>()> factory) {
-    return registerService(std::type_index(typeid(T)), convertFunction<T>(std::move(factory)));
+    return registerService(std::type_index(typeid(T)), convertFunction<T, T>(std::move(factory)));
 }
 
 /**
@@ -149,7 +149,7 @@ bool registerService(const std::string &contract, std::function<std::shared_ptr<
  */
 template <class T>
 bool registerService(const std::string &contract, std::function<std::shared_ptr<T>()> factory) {
-    return registerService(std::type_index(typeid(T)), contract, convertFunction<T>(std::move(factory)));
+    return registerService(std::type_index(typeid(T)), contract, convertFunction<T, T>(std::move(factory)));
 }
 
 /**
@@ -172,7 +172,7 @@ bool registerLazySingleton(std::function<std::shared_ptr<RT>()> factory) {
  */
 template <class T>
 bool registerLazySingleton(std::function<std::shared_ptr<T>()> factory) {
-    return registerLazySingleton(std::type_index(typeid(T)), convertFunction<T>(std::move(factory)));
+    return registerLazySingleton(std::type_index(typeid(T)), convertFunction<T, T>(std::move(factory)));
 }
 
 /**
@@ -197,7 +197,7 @@ bool registerLazySingleton(const std::string &contract, std::function<std::share
  */
 template <class T>
 bool registerLazySingleton(const std::string &contract, std::function<std::shared_ptr<T>()> factory) {
-    return registerLazySingleton(std::type_index(typeid(T)), contract, convertFunction<T>(std::move(factory)));
+    return registerLazySingleton(std::type_index(typeid(T)), contract, convertFunction<T, T>(std::move(factory)));
 }
 
 /**
