@@ -60,6 +60,10 @@ struct TemplateTagType {};
 
 class EnableLoggerUser final : public PureIOC::IEnableLogger {
 public:
+    static std::shared_ptr<PureIOC::ILogger> fetchLogger() {
+        return logger();
+    }
+
     void logInfo(const std::string &message) {
         LOG(info, message);
     }
@@ -103,9 +107,6 @@ TEST_F(LocatorLoggerUsageTest, GetServiceReturnsNullptrWhenNoLoggerIsRegistered)
     auto logger = PureIOC::getService<PureIOC::ILogger>();
     EXPECT_EQ(logger, nullptr);
 }
-
-
-#include <enable-logger-interface.h>
 } // namespace
 
 TEST_F(LocatorLoggerUsageTest, CanBeUsedByEnableLogger) {
@@ -115,7 +116,7 @@ TEST_F(LocatorLoggerUsageTest, CanBeUsedByEnableLogger) {
     EXPECT_CALL(*mock_services, getService(testing::Eq(std::type_index(typeid(PureIOC::ILogger)))))
         .WillOnce(testing::Return(std::any(logger_interface)));
 
-    auto logger = PureIOC::IEnableLogger::logger();
+    auto logger = EnableLoggerUser::fetchLogger();
     ASSERT_NE(logger, nullptr);
     EXPECT_EQ(logger, mock_logger);
 }

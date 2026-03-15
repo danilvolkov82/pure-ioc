@@ -24,7 +24,7 @@ protected:
      */
     virtual ~IEnableLogger() = default;
 
-public:
+protected:
     /**
      * @brief Gets the logger.
      * @return A shared pointer to the logger.
