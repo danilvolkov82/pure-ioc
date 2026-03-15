@@ -15,7 +15,7 @@ PureIoC is a lightweight dependency injection (IoC) container for C++17. It is d
 ### Prerequisites
 
 - C++17 compatible compiler
-- CMake 3.10 or higher
+- CMake 3.16 or higher
 
 ### Building
 
