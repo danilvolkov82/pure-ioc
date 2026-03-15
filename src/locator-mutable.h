@@ -73,6 +73,27 @@ bool registerConstant(const std::type_index &type, const std::string &contract, 
 bool registerLogger(std::shared_ptr<ILogger> logger);
 
 /**
+ * @brief Unregisters a service from the locator.
+ * @param type The type of the service to unregister.
+ */
+void unregister(const std::type_index &type);
+
+/**
+ * @brief Unregisters a service with a contract from the locator.
+ * @param type The type of the service to unregister.
+ * @param contract The contract associated with the service.
+ */
+void unregister(const std::type_index &type, const std::string &contract);
+
+/**
+ * @brief Resets the global service container.
+ *
+ * After cleanup, the next access to the locator will use a fresh default
+ * container unless another container is explicitly registered first.
+ */
+void cleanup();
+
+/**
  * @brief Converts a factory function to a function that returns std::any.
  * @tparam T The type of the service.
  * @tparam RT The return type of the factory.
@@ -274,6 +295,25 @@ bool registerLogger() {
 template <class T>
 bool registerLogger(std::function<std::shared_ptr<T>()> factory) {
     return registerLazySingleton<ILogger, T>(std::move(factory));
+}
+
+/**
+ * @brief Unregisters a service from the locator by template type.
+ * @tparam T The type of the service to unregister.
+ */
+template <class T>
+void unregister() {
+    unregister(std::type_index(typeid(T)));
+}
+
+/**
+ * @brief Unregisters a service with a contract from the locator by template type.
+ * @tparam T The type of the service to unregister.
+ * @param contract The contract associated with the service.
+ */
+template <class T>
+void unregister(const std::string &contract) {
+    unregister(std::type_index(typeid(T)), contract);
 }
 }
 #endif // LOCATOR_MUTABLE_H

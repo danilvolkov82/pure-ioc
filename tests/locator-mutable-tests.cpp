@@ -148,6 +148,40 @@ TEST(LocatorMutable, RegisterLoggerForwardsToContainer) {
     EXPECT_TRUE(PureIOC::registerLogger(logger));
 }
 
+TEST(LocatorMutable, UnregisterForwardsToContainer) {
+    auto mock = std::make_shared<MockServices>();
+    PureIOC::registerContainer(mock);
+
+    EXPECT_CALL(*mock, unregisterService(testing::Eq(std::type_index(typeid(int)))))
+        .Times(1);
+
+    PureIOC::unregister(std::type_index(typeid(int)));
+}
+
+TEST(LocatorMutable, UnregisterWithContractForwardsToContainer) {
+    auto mock = std::make_shared<MockServices>();
+    PureIOC::registerContainer(mock);
+
+    EXPECT_CALL(*mock, unregisterService(testing::Eq(std::type_index(typeid(int))), testing::StrEq("delta")))
+        .Times(1);
+
+    PureIOC::unregister(std::type_index(typeid(int)), "delta");
+}
+
+TEST(LocatorMutable, CleanupReplacesCurrentContainer) {
+    auto mock = std::make_shared<MockServices>();
+    PureIOC::registerContainer(mock);
+
+    auto before_cleanup = PureIOC::getContainer();
+    ASSERT_EQ(before_cleanup.get(), mock.get());
+
+    PureIOC::cleanup();
+
+    auto after_cleanup = PureIOC::getContainer();
+    ASSERT_NE(after_cleanup, nullptr);
+    EXPECT_NE(after_cleanup.get(), mock.get());
+}
+
 // Template functions tests
 TEST(LocatorMutable, TemplateRegisterService) {
     auto mock = std::make_shared<MockServices>();
@@ -248,4 +282,24 @@ TEST(LocatorMutable, TemplateRegisterLoggerWithFactory) {
     EXPECT_TRUE((PureIOC::registerLogger<DummyLogger>([] {
         return std::make_shared<DummyLogger>();
     })));
+}
+
+TEST(LocatorMutable, TemplateUnregister) {
+    auto mock = std::make_shared<MockServices>();
+    PureIOC::registerContainer(mock);
+
+    EXPECT_CALL(*mock, unregisterService(testing::Eq(std::type_index(typeid(ITestService)))))
+        .Times(1);
+
+    PureIOC::unregister<ITestService>();
+}
+
+TEST(LocatorMutable, TemplateUnregisterWithContract) {
+    auto mock = std::make_shared<MockServices>();
+    PureIOC::registerContainer(mock);
+
+    EXPECT_CALL(*mock, unregisterService(testing::Eq(std::type_index(typeid(ITestService))), testing::StrEq("test")))
+        .Times(1);
+
+    PureIOC::unregister<ITestService>("test");
 }

@@ -79,4 +79,28 @@ bool registerLogger(std::shared_ptr<ILogger> logger) {
     std::any logger_any = std::any(std::move(logger));
     return getContainer()->registerConstant(std::type_index(typeid(ILogger)), std::move(logger_any));
 }
+
+/**
+ * @brief Unregisters a service from the locator.
+ * @param type The type of the service to unregister.
+ */
+void unregister(const std::type_index &type) {
+    getContainer()->unregisterService(type);
+}
+
+/**
+ * @brief Unregisters a service with a contract from the locator.
+ * @param type The type of the service to unregister.
+ * @param contract The contract associated with the service.
+ */
+void unregister(const std::type_index &type, const std::string &contract) {
+    getContainer()->unregisterService(type, contract);
+}
+
+/**
+ * @brief Resets the global service container.
+ */
+void cleanup() {
+    registerContainer(nullptr);
+}
 }
